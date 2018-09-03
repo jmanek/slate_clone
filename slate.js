@@ -10,6 +10,7 @@ WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
 License for the specific language governing permissions and limitations
 under
 */
+
 $(document).ready(function() {
     marked.setOptions({
       renderer: new marked.Renderer(),
@@ -41,15 +42,14 @@ $(document).ready(function() {
     Handlebars.registerHelper('html', function (content) {
       return new Handlebars.SafeString(content)
     })
+
   create_docs()
 })
 
 function create_docs() {
 
   var build = function(data, content) {
-    console.log(data)
     $.get('layouts/layout.html', function(source) {
-      console.log('asd')
       if (data.includes) {
         var includes = ''
         for (var i = 0; i < data.includes.length; i++) {
@@ -58,40 +58,27 @@ function create_docs() {
         }
         source = source.replace(/{{{html content}}}/g, '{{{html content}}}' + includes)
       }
-      
       var template = Handlebars.compile(source)
-      console.log(content)
       data['content'] = marked(content.slice(2).join(''))
-      console.log(template(data))
       $('body').html(template(data))
-      // document.open();
-      // document.write(template(data));;
-      // document.close();
     })
   }
 
-
   $.get('slate.md', function(content) {
     content = content.split(/---/g)
-
     if (content.length === 1) {
       throw new Error('No markdown page settings found!')
     }
-
     var data = {}
     var tokens = new marked.Lexer().lex(content[1])
-    console.log(tokens)
     var token
     var listName
 
     for (var idx = 0; idx < tokens.length; idx++) {
       token = tokens[idx]
-      console.log(token)
       if (token.type === 'list_item_start') {
         token = tokens[idx + 1].text
-        console.log(listName)
         if (listName === 'language_tabs') {
-          console.log(token)
           var lang = token
           var langSplit = lang.split(':')
           if (langSplit.length === 1) token = {name: langSplit[0], text: langSplit[0]}
@@ -111,28 +98,22 @@ function create_docs() {
         }
       }
     }
-      console.log('asdasdsasd')
 
-      if (data.includes) {
-        // create partials
-        var partials_built = 0;
-        for (var i = 0; i < data.includes.length; i++) {
-          var includeFileName = data.includes[i]
-          console.log('asdasdasd')
-          var includeFilePath = 'includes/' + includeFileName + '.md'
-          $.get(includeFilePath, function(content) {
-            
-            var markedInclude = marked(content)
-            Handlebars.registerPartial(includeFileName, markedInclude)
-            partials_built++
-            if (partials_built == data.includes.length) {
-              build(data, content)
-            }
-          })
-        }
-      } else {
-        build(data, content)
+    if (data.includes) {
+      var partials_built = 0
+      for (var i = 0; i < data.includes.length; i++) {
+        var includeFileName = data.includes[i]
+        var includeFilePath = 'includes/' + includeFileName + '.md'
+        $.get(includeFilePath, function(content) {
+          var markedInclude = marked(content)
+          Handlebars.registerPartial(includeFileName, markedInclude)
+          partials_built++
+          if (partials_built == data.includes.length) {
+            build(data, content)
+          }
+        })
       }
+    } else { build(data, content) }
   })
 } 
 
