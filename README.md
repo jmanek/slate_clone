@@ -10,7 +10,7 @@ This is mostly a fork of my [node.js port](http://jmanek.github.io/slate_node/),
 ### Running
 
 1. Clone the repo
-2. Deploy it to a local `python3 -m http.server`, or remote host
+2. Deploy it to a local or remote host
 3. `slate.md` is read by `slate.js` through `index.html` at runtime
 
-It is not running correctly with Github Pages right now
+It is not running correctly with Github Pages right now. Working properly with `python3 -m http.server`. 
