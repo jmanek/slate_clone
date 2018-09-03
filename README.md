@@ -14,4 +14,4 @@ This is mostly a fork of my [node.js port](http://jmanek.github.io/slate_node/),
 2. Deploy it to a local `python3 -m http.server`, or remote host
 3. `slate.md` is read by `slate.js` through `index.html` at runtime
 
-It is nott running correctly with Github Pages right now
+It is not running correctly with Github Pages right now
