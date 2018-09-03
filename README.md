@@ -1,6 +1,5 @@
 [Slate](https://github.com/tripit/slate) with no build step
 ========
-[![js-standard-style](https://cdn.rawgit.com/feross/standard/master/badge.svg)](https://github.com/feross/standard)
 
 A port of the documentation generator Slate to require no building.  All you have to do is clone the repo and replace the markdown.  You will not be able to view the documentation until deploying it to a server.
 [See it](http://jmanek.github.io/slate_clone/) in action!
