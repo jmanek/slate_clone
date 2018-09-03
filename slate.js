@@ -71,7 +71,7 @@ function create_docs() {
   }
 
 
-  $.get('index.md', function(content) {
+  $.get('slate.md', function(content) {
     content = content.split(/---/g)
 
     if (content.length === 1) {
