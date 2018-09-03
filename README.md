@@ -12,4 +12,11 @@ This is a fork of my [node.js port](https://github.com/jmanek/slate_node/) with 
 2. Deploy it to a local or remote host. e.g. `python3 -m http.server` or Github Pages
 3. `slate.md` is read by `slate.js` through `index.html` at runtime
 
+### Code Highlighting
+Numerous themes for highlight.js are available in `stylesheets/highlight`. You can switch between them by changing `index.html`
+```html
+<link href="stylesheets/highlight/solarized-dark.css" rel="stylesheet" type="text/css" />
+```
+
+
 WIP
