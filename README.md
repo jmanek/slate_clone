@@ -12,6 +12,6 @@ This is a fork of my [node.js port](https://github.com/jmanek/slate_node/) with 
 2. Deploy it to a local or remote host
 3. `slate.md` is read by `slate.js` through `index.html` at runtime
 
-It is not running correctly with Github Pages right now, it seems you can't server .md files unless they are the README. Working at least with `python3 -m http.server` / AWS S3.
+It is not running correctly with Github Pages right now, it seems you can't serve .md files besides the README? Working at least with `python3 -m http.server` / AWS S3.
 
 WIP
