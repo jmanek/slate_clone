@@ -107,10 +107,7 @@ function create_docs() {
         $.get(includeFilePath, function(includeContent) {
           var markedInclude = marked(includeContent)
           Handlebars.registerPartial(includeFileName, markedInclude)
-          partials_built++
-          if (partials_built == data.includes.length) {
-            build(data, content)
-          }
+          if (++partials_built === data.includes.length) build(data, content)
         })
       }
     } else { build(data, content) }
