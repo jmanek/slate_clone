@@ -94,13 +94,15 @@ function create_docs() {
 
     // Create HTML for includes
     if (data.includes) {
-      var partials_built = 0
+      var includes_built = 0
+      var build_include = function(includeName) {
+        return function(includeContent) {
+          Handlebars.registerPartial(includeName, marked(includeContent))
+          if (++includes_built === data.includes.length) build_layout(data, content)
+        }
+      }
       for (var i = 0; i < data.includes.length; i++) {
-        var includeFileName = data.includes[i] 
-        $.get('includes/_' + includeFileName + '.md', function(includeContent) {
-          Handlebars.registerPartial(includeFileName, marked(includeContent))
-          if (++partials_built === data.includes.length) build_layout(data, content)
-        })
+        $.get('includes/_' + data.includes[i] + '.md', build_include(data.includes[i]))
       }
     } else { build_layout(data, content) }
   })
