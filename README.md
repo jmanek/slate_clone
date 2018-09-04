@@ -21,4 +21,4 @@ This is a fork of my [node.js port](https://github.com/jmanek/slate_node/) with 
 ### Includes
 Includes are handled as described in the [Slate Wiki](https://github.com/lord/slate/wiki/Using-Includes). The filename must have an underscore prepended to it, which is not included in the markdown file description.
 
-WIP: Make look and feel equiavlent to Slate 2.3.1.
+WIP: Make look and feel equivalent to Slate 2.3.1.
