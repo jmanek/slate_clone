@@ -46,17 +46,19 @@ $(document).ready(function() {
   create_docs()
 })
 
+// Reads in slate.md located in the same directory.
+// Uses that to populate the <body> element of index.html
+// with generated documentation
 function create_docs() {
 
   // Apply our data to the layout and render it
-  var build_layout = function(data, content) {
+  var build_layout = function(data) {
     $.get('layouts/layout.html', function(source) {
       if (data.includes) {
         var includes = ''
         for (var i = 0; i < data.includes.length; i++) includes += '\n' + '{{> ' + data.includes[i] + ' }}'
         source = source.replace(/{{{html content}}}/g, '{{{html content}}}' + includes)
       }
-      data['content'] = marked(content.slice(2).join(''))
       $('body').html(Handlebars.compile(source)(data))
     })
   }
@@ -67,7 +69,7 @@ function create_docs() {
 
     // Parse header
     var tokens = new marked.Lexer().lex(content[1])
-    var data = {}
+    var data = {content: marked(content.slice(2).join(''))}
     var listName
     for (var i = 0; i < tokens.length; i++) {
       var token = tokens[i]
@@ -98,13 +100,13 @@ function create_docs() {
       var build_include = function(includeName) {
         return function(includeContent) {
           Handlebars.registerPartial(includeName, marked(includeContent))
-          if (++includes_built === data.includes.length) build_layout(data, content)
+          if (++includes_built === data.includes.length) build_layout(data)
         }
       }
       for (var i = 0; i < data.includes.length; i++) {
         $.get('includes/_' + data.includes[i] + '.md', build_include(data.includes[i]))
       }
-    } else { build_layout(data, content) }
+    } else { build_layout(data) }
   })
 } 
 
