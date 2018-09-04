@@ -11,7 +11,7 @@ toc_footers:
   - <a href='http://github.com/tripit/slate'>Documentation Powered by Slate</a>
 
 includes:
-  - _errors
+  - errors
 
 search: true
 ---

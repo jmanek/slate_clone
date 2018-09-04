@@ -103,7 +103,7 @@ function create_docs() {
       var partials_built = 0
       for (var i = 0; i < data.includes.length; i++) {
         var includeFileName = data.includes[i]
-        var includeFilePath = 'includes/' + includeFileName + '.md'
+        var includeFilePath = 'includes/_' + includeFileName + '.md'
         $.get(includeFilePath, function(includeContent) {
           var markedInclude = marked(includeContent)
           Handlebars.registerPartial(includeFileName, markedInclude)

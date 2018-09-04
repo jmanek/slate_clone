@@ -18,5 +18,7 @@ This is a fork of my [node.js port](https://github.com/jmanek/slate_node/) with 
 <link href="stylesheets/highlight/solarized-dark.css" rel="stylesheet" type="text/css" />
 ```
 
+### Includes
+Includes are handled as described in the [Slate Wiki](https://github.com/lord/slate/wiki/Using-Includes). The filename must have an underscore prepended to it, which is not included in the markdown file description.
 
 WIP
