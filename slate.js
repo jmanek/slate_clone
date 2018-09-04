@@ -43,16 +43,16 @@ $(document).ready(function() {
       return new Handlebars.SafeString(content)
     })
 
-  create_docs()
+  createDocs()
 })
 
 // Reads in slate.md located in the same directory.
 // Uses that to populate the <body> element of index.html
 // with generated documentation
-function create_docs() {
+function createDocs() {
 
   // Apply our data to the layout and render it
-  var build_layout = function(data) {
+  var buildLayout = function(data) {
     $.get('layouts/layout.html', function(source) {
       if (data.includes) {
         var includes = ''
@@ -96,17 +96,17 @@ function create_docs() {
 
     // Create HTML for includes
     if (data.includes) {
-      var includes_built = 0
-      var build_include = function(includeName) {
+      var includesBuilt = 0
+      var buildInclude = function(includeName) {
         return function(content) {
           Handlebars.registerPartial(includeName, marked(content))
-          if (++includes_built === data.includes.length) build_layout(data)
+          if (++includesBuilt === data.includes.length) buildLayout(data)
         }
       }
       for (var i = 0; i < data.includes.length; i++) {
-        $.get('includes/_' + data.includes[i] + '.md', build_include(data.includes[i]))
+        $.get('includes/_' + data.includes[i] + '.md', buildInclude(data.includes[i]))
       }
-    } else { build_layout(data) }
+    } else { buildLayout(data) }
   })
 } 
 
