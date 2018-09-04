@@ -48,48 +48,41 @@ $(document).ready(function() {
 
 function create_docs() {
 
-  var build = function(data, content) {
+  // Apply our data to the layout and render it
+  var build_layout = function(data, content) {
     $.get('layouts/layout.html', function(source) {
       if (data.includes) {
         var includes = ''
-        for (var i = 0; i < data.includes.length; i++) {
-          var include = data.includes[i]
-          includes += '\n' + '{{> ' + include + ' }}'
-        }
+        for (var i = 0; i < data.includes.length; i++) includes += '\n' + '{{> ' + data.includes[i] + ' }}'
         source = source.replace(/{{{html content}}}/g, '{{{html content}}}' + includes)
       }
-      var template = Handlebars.compile(source)
       data['content'] = marked(content.slice(2).join(''))
-      $('body').html(template(data))
+      $('body').html(Handlebars.compile(source)(data))
     })
   }
 
   $.get('slate.md', function(content) {
     content = content.split(/---/g)
-    if (content.length === 1) {
-      throw new Error('No markdown page settings found!')
-    }
-    var data = {}
-    var tokens = new marked.Lexer().lex(content[1])
-    var token
-    var listName
+    if (content.length === 1) throw new Error('No markdown page settings found!')
 
-    for (var idx = 0; idx < tokens.length; idx++) {
-      token = tokens[idx]
+    // Parse header
+    var tokens = new marked.Lexer().lex(content[1])
+    var data = {}
+    var listName
+    for (var i = 0; i < tokens.length; i++) {
+      var token = tokens[i]
       if (token.type === 'list_item_start') {
-        token = tokens[idx + 1].text
+        token = tokens[i + 1].text
         if (listName === 'language_tabs') {
-          var lang = token
-          var langSplit = lang.split(':')
+          var langSplit = token.split(':')
           if (langSplit.length === 1) token = {name: langSplit[0], text: langSplit[0]}
           if (langSplit.length === 2) token = {name: langSplit[0], text: langSplit[1]}
         }
         data[listName].push(token)
-        idx += 2
+        i += 2
       }
-
       if (token.type === 'paragraph') {
-        if (tokens[idx + 1] !== undefined && tokens[idx + 1].type === 'list_start') {
+        if (tokens[i + 1] !== undefined && tokens[i + 1].type === 'list_start') {
           listName = token.text.slice(0, -1)
           data[listName] = []
         } else {
@@ -99,18 +92,17 @@ function create_docs() {
       }
     }
 
+    // Create HTML for includes
     if (data.includes) {
       var partials_built = 0
       for (var i = 0; i < data.includes.length; i++) {
-        var includeFileName = data.includes[i]
-        var includeFilePath = 'includes/_' + includeFileName + '.md'
-        $.get(includeFilePath, function(includeContent) {
-          var markedInclude = marked(includeContent)
-          Handlebars.registerPartial(includeFileName, markedInclude)
-          if (++partials_built === data.includes.length) build(data, content)
+        var includeFileName = data.includes[i] 
+        $.get('includes/_' + includeFileName + '.md', function(includeContent) {
+          Handlebars.registerPartial(includeFileName, marked(includeContent))
+          if (++partials_built === data.includes.length) build_layout(data, content)
         })
       }
-    } else { build(data, content) }
+    } else { build_layout(data, content) }
   })
 } 
 
