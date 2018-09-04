@@ -98,8 +98,8 @@ function create_docs() {
     if (data.includes) {
       var includes_built = 0
       var build_include = function(includeName) {
-        return function(includeContent) {
-          Handlebars.registerPartial(includeName, marked(includeContent))
+        return function(content) {
+          Handlebars.registerPartial(includeName, marked(content))
           if (++includes_built === data.includes.length) build_layout(data)
         }
       }
