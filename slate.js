@@ -12,28 +12,20 @@ under
 */
 
 $(document).ready(function() {
+
     marked.setOptions({
-      renderer: new marked.Renderer(),
-      gfm: true,
-      tables: true,
-      breaks: false,
-      pedantic: false,
-      sanitize: false,
-      smartLists: true,
-      smartypants: true,
       highlight: function (code, lang) {
         return hljs.highlight(lang, code).value
       }
     })
     
-    // Create syntax-highlighting alias 'shell' for 'bash'
-    var bash = hljs.getLanguage('bash')
-    hljs.registerLanguage('shell', function (highlight) {
-      return bash
-    })
-    
     // Easier than changing Slate's js
     marked.defaults.langPrefix = 'highlight '
+    
+    // Create syntax-highlighting alias 'shell' for 'bash'
+    hljs.registerLanguage('shell', function (highlight) {
+      return hljs.getLanguage('bash')
+    })
     
     Handlebars.registerHelper('str', function (item) {
       return '"' + item + '"'
@@ -56,7 +48,9 @@ function createDocs() {
     $.get('layouts/layout.html', function(source) {
       if (data.includes) {
         var includes = ''
-        for (var i = 0; i < data.includes.length; i++) includes += '\n' + '{{> ' + data.includes[i] + ' }}'
+        for (var i = 0; i < data.includes.length; i++) {
+          includes += '\n' + '{{> ' + data.includes[i] + ' }}'
+        }
         source = source.replace(/{{{html content}}}/g, '{{{html content}}}' + includes)
       }
       $('body').html(Handlebars.compile(source)(data))
